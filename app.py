@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Hello, jenkins pipeline with git hookskk'
+    return 'Hello Jenkins'
 
 if __name__ == '__main__':
     app.run(debug=True)
