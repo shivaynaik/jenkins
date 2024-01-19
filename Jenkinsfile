@@ -29,7 +29,7 @@ pipeline {
         stage('Run Docker Image') {
             steps {
                 script {
-                    dockerImage.inside("-p 8080:8080") {
+                    dockerImage.inside("-p 8081:8080") {
                         sh 'uvicorn app:app --host 0.0.0.0 --port 8080'
                     }
                 }
