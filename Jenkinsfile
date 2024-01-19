@@ -17,7 +17,7 @@ pipeline {
         stage('Building image') {
             steps {
                 script {
-                    dockerImage = docker.build imagename
+                    dockerImage = docker.build "${imagename}:${BUILD_NUMBER}"
                 }
             }
         }
@@ -25,7 +25,7 @@ pipeline {
         stage('Running image') {
             steps {
                 script {
-                    sh "docker run ${imagename}:latest"
+                    sh "docker run ${imagename}:${BUILD_NUMBER}"
                 }
             }
         }
@@ -33,8 +33,8 @@ pipeline {
         stage('Deploy Image') {
             steps {
                 script {
-                    docker.withRegistry('', registryCredential) {
-                        dockerImage.push("$BUILD_NUMBER")
+                    docker.withRegistry('https://index.docker.io/v1/', registryCredential) {
+                        dockerImage.push("${BUILD_NUMBER}")
                         dockerImage.push('latest')
                     }
                 }
