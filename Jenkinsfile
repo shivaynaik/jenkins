@@ -14,7 +14,7 @@ pipeline {
         stage('Cloning Git') {
             steps {
                 script {
-                    git branch: 'main', url: 'https://github.com/Narsi12/fastapi_helloworld_cicd.git'
+                    git branch: 'main', url: 'https://github.com/GANESH0369/jenkins.git'
                 }
             }
         }
