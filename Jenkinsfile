@@ -41,7 +41,7 @@ pipeline {
                     withCredentials([
                         usernamePassword(credentialsId: 'dckr_pat_JAmd_CrVioeIykrKNE4hCTG90gk', usernameVariable: 'ganeshpoloju', passwordVariable: 'Ganesh@1998')
                     ]) {
-                        docker.withRegistry('https://index.docker.io/v1/', 'registryCredential') {
+                        docker.withRegistry('https://index.docker.io/v1/', 'DOCKER_REGISTRY_USERNAME') {
                             dockerImage.push('latest')
                             dockerImage.push("${imagename}:${BUILD_NUMBER}")
                         }
