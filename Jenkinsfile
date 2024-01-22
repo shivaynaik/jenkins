@@ -4,24 +4,26 @@ pipeline {
         registryCredential ='dckr_pat_AKkiQ72FXPmBbSyNKYDNMuUX1D4'
         dockerImage = ''
     }
- 
+
     agent any
- 
+
     stages {
         stage('Cloning Git') {
             steps {
-                git([url: 'https://github.com/GANESH0369/jenkins.git', branch: 'main'])
-            }
-        }
- 
-        stage('Building image') {
-            steps {
                 script {
-                    dockerImage = docker.build "${imagename}:latest"
+                    git branch: 'main', url: 'https://github.com/GANESH0369/jenkins.git'
                 }
             }
         }
- 
+
+        stage('Building image') {
+            steps {
+                script {
+                    dockerImage = docker.build(imagename, 'latest')
+                }
+            }
+        }
+
         stage('Running image') {
             steps {
                 script {
@@ -29,11 +31,11 @@ pipeline {
                 }
             }
         }
- 
+
         stage('Deploy Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', registryCredential) {
+                    docker.withRegistry('', registryCredential) {
                         dockerImage.push('latest')
                     }
                 }
@@ -41,4 +43,3 @@ pipeline {
         }
     }
 }
-
