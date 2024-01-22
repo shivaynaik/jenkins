@@ -21,15 +21,6 @@ pipeline {
                 }
             }
         }
- 
-        stage('Running image') {
-            steps {
-                script {
-                    docker.image("${imagename}:latest").run("--rm -p 8080:8080", detach: true)
-                }
-            }
-        }
- 
         stage('Deploy Image') {
             steps {
                 script {
