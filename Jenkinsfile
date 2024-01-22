@@ -1,6 +1,7 @@
 pipeline {
     environment {
         imagename = "ganeshpoloju/jenkinss"
+        registryCredential = 'dckr_pat_JAmd_CrVioeIykrKNE4hCTG90gk'
         dockerImage = ''
         containerName = 'my-container'
     }
@@ -37,9 +38,7 @@ pipeline {
         stage('Deploy Image') {
             steps {
                 script {
-                    withCredentials([
-                        usernamePassword(credentialsId: 'dckr_pat_JAmd_CrVioeIykrKNE4hCTG90gk', usernameVariable: 'ganeshpoloju', passwordVariable: 'Ganesh@1998')
-                    ]) {
+                    withCredentials([usernamePassword(credentialsId: registryCredential, usernameVariable: 'DOCKER_REGISTRY_USERNAME', passwordVariable: 'DOCKER_REGISTRY_PASSWORD')]) {
                         docker.withRegistry('https://index.docker.io/v1/', 'DOCKER_REGISTRY_USERNAME') {
                             dockerImage.push('latest')
                             dockerImage.push("${imagename}:${BUILD_NUMBER}")
