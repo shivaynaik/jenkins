@@ -25,7 +25,7 @@ pipeline {
         stage('Running image') {
             steps {
                 script {
-                    sh "docker run ${imagename}:latest"
+                    docker.image("${imagename}:latest").run("--rm -p 8080:8080", detach: true)
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', registryCredential) {
-                        dockerImage.push('latest')
+                        dockerImage.push("latest")
                     }
                 }
             }
