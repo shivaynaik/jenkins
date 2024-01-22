@@ -1,5 +1,5 @@
 pipeline {
-    environment {
+     environment {
         imagename = "ganeshpoloju/jenkins"
         registryCredential ='dckr_pat_AKkiQ72FXPmBbSyNKYDNMuUX1D4'
         dockerImage = ''
@@ -41,3 +41,4 @@ pipeline {
         }
     }
 }
+
