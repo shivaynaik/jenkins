@@ -40,7 +40,7 @@ pipeline {
         stage('Deploy Image') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: '48b5285f1592', usernameVariable: 'ganeshpoloju', passwordVariable: 'Ganesh@1998')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dckr_pat_JAmd_CrVioeIykrKNE4hCTG90gk', usernameVariable: 'ganeshpoloju', passwordVariable: 'Ganesh@1998')]) {
                         docker.withRegistry('https://index.docker.io/v1/', 'DOCKER_REGISTRY_USERNAME') {
                             dockerImage.push('latest')
                             dockerImage.push("${imagename}:${BUILD_NUMBER}")
