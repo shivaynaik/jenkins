@@ -21,7 +21,7 @@ pipeline {
         stage('Deploy Image') {
             steps {
                 script {
-                    docker.withRegistry('https://your-registry-url', registryCredential) {
+                    withDockerRegistry(credentialsId: registryCredential, url: 'https://index.docker.io/v1/') {
                         dockerImage.push('latest')
                         dockerImage.push("${env.BUILD_NUMBER}")
                     }
