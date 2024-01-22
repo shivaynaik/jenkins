@@ -18,16 +18,18 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Image') {
+       stage('Deploy Image') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: registryCredential, url: 'https://index.docker.io/v1/') {
-                        dockerImage.push('latest')
-                        dockerImage.push("${env.BUILD_NUMBER}")
-                    }
+                    // Login to Docker Hub
+                    sh "docker login -u ganesh -p Ganesh@1998"
+ 
+                    // Push the image
+                    sh "docker push ${imagename}:latest"
                 }
             }
         }
+    
         stage('Remove Unused docker image') {
             steps {
                 sh "docker rmi $imagename:$BUILD_NUMBER"
@@ -36,3 +38,8 @@ pipeline {
         }
     }
 }
+
+
+
+
+
