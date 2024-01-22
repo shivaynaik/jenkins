@@ -1,7 +1,7 @@
 pipeline {
     environment {
         imagename = "ganeshpoloju/jenkinss"
-        registryCredential = 'Ganesh@1998'
+        registryCredential = 'ganeshpoloju'
         dockerImage = ''
     }
  
@@ -24,8 +24,9 @@ pipeline {
         stage('Deploy Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', registryCredential) {
+                    docker.withRegistry('', registryCredential) {
                         dockerImage.push("latest")
+                        
                     }
                 }
             }
