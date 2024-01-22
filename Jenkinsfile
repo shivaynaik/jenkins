@@ -1,7 +1,7 @@
 pipeline {
-     environment {
+    environment {
         imagename = "ganeshpoloju/jenkins"
-        registryCredential ='dckr_pat_AKkiQ72FXPmBbSyNKYDNMuUX1D4'
+        registryCredential = 'dckr_pat_AKkiQ72FXPmBbSyNKYDNMuUX1D4'
         dockerImage = ''
     }
 
@@ -19,7 +19,7 @@ pipeline {
         stage('Building image') {
             steps {
                 script {
-                    dockerImage = docker.build(imagename, 'latest')
+                    dockerImage = docker.build(imagename + ":latest")
                 }
             }
         }
