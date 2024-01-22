@@ -16,14 +16,6 @@ pipeline {
             }
         }
 
-        stage('Building image') {
-            steps {
-                script {
-                    dockerImage = docker.build(imagename + ":latest")
-                }
-            }
-        }
-
         stage('Running image') {
             steps {
                 script {
