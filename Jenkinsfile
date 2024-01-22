@@ -1,22 +1,34 @@
 pipeline {
+    environment {
+        imagename = "ganeshpoloju/jenkinss"
+        registryCredential = 'dckr_pat_JAmd_CrVioeIykrKNE4hCTG90gk'
+        dockerImage = ''
+        containerName = '48b5285f1592'
+        AWS_ACCESS_KEY_ID     = credentials('AKIARY57NE7BG2462KVZ')
+        AWS_SECRET_ACCESS_KEY = credentials('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')
+        S3_BUCKET             = 'cicd-mt'
+        DOCKER_IMAGE_NAME     = 'ganeshpoloju/jenkinss '
+    }
     agent any
-    
     stages {
-        stage('Clone and Build') {
+        stage('Cloning Git') {
             steps {
                 script {
-                    checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'https://github.com/Narsi12/fastapi_helloworld_cicd.git']]])
-                    docker.build("ganeshpoloju/jenkinss:latest")
+                    git branch: 'main', url: 'https://github.com/Narsi12/fastapi_helloworld_cicd.git'
                 }
             }
         }
-        stage('Deploy Image') {
+        stage('Building image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dckr_pat_JAmd_CrVioeIykrKNE4hCTG90gk') {
-                        docker.image("ganeshpoloju/jenkinss:latest").push()
-                        docker.image("ganeshpoloju/jenkinss:${BUILD_NUMBER}").push() // Tag with Jenkins build number
-                    }
+                    dockerImage = docker.build "${imagename}:latest"
+                }
+            }
+        }
+        stage('Push Docker Image to S3') {
+            steps {
+                script {
+                    sh "docker save ${imagename}:latest | gzip | aws s3 cp - s3://${S3_BUCKET}/${DOCKER_IMAGE_NAME}.tar.gz"
                 }
             }
         }
