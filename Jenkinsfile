@@ -30,18 +30,21 @@ pipeline {
         stage('Stop and Remove Container') {
             steps {
                 script {
-                    sh "docker stop ${containerName} || true"  // Stop the container, ignoring errors if it's not running
-                    sh "docker rm ${containerName} || true"    // Remove the container, ignoring errors if it doesn't exist
+                    sh "docker stop ${containerName} || true"
+                    sh "docker rm ${containerName} || true"
                 }
             }
         }
         stage('Deploy Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', registryCredential) {
-                        // Additional steps (if needed) before pushing the image
-                        dockerImage.push('latest')
-                        dockerImage.push("${imagename}:${BUILD_NUMBER}") // Tag with Jenkins build number
+                    withCredentials([
+                        usernamePassword(credentialsId: 'dckr_pat_JAmd_CrVioeIykrKNE4hCTG90gk', usernameVariable: 'ganeshpoloju', passwordVariable: 'Ganesh@1998')
+                    ]) {
+                        docker.withRegistry('https://index.docker.io/v1/', 'registryCredential') {
+                            dockerImage.push('latest')
+                            dockerImage.push("${imagename}:${BUILD_NUMBER}")
+                        }
                     }
                 }
             }
