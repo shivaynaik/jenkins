@@ -21,12 +21,20 @@ pipeline {
                 }
             }
         }
+ 
+        stage('Running image') {
+            steps {
+                script {
+                    sh "docker run ${imagename}:latest"
+                }
+            }
+        }
+ 
         stage('Deploy Image') {
             steps {
                 script {
-                    docker.withRegistry('', registryCredential) {
-                        dockerImage.push("latest")
-                        
+                    docker.withRegistry('https://index.docker.io/v1/', registryCredential) {
+                        dockerImage.push('latest')
                     }
                 }
             }
