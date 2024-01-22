@@ -38,9 +38,7 @@ pipeline {
         stage('Deploy Image') {
             steps {
                 script {
-                    docker.withRegistry('
-https://index.docker.io/v1/'
-, registryCredential) {
+                    docker.withRegistry('https://index.docker.io/v1/', registryCredential) {
                         // Additional steps (if needed) before pushing the image
                         dockerImage.push('latest')
                         dockerImage.push("${imagename}:${BUILD_NUMBER}") // Tag with Jenkins build number
