@@ -4,34 +4,36 @@ pipeline {
         dockerImage = ''
         containerName = 'my-container'
         dockerHubCredentials = 'admin'
+        // Add a tag for the Docker image
+        dockerImageTag = "${imagename}:${env.BUILD_NUMBER}"
     }
- 
+
     agent any
- 
+
     stages {
         stage('Cloning Git') {
             steps {
                 git([url: 'https://github.com/GANESH0369/jenkins.git', branch: 'main'])
             }
         }
- 
+
         stage('Building image') {
             steps {
                 script {
-                    dockerImage = docker.build "${imagename}:latest"
+                    dockerImage = docker.build dockerImageTag
                 }
             }
         }
- 
+
         stage('Running image') {
             steps {
                 script {
-                    sh "docker run -d --name ${containerName} ${imagename}:latest"
+                    sh "docker run -d --name ${containerName} ${dockerImageTag}"
                     // Perform any additional steps needed while the container is running
                 }
             }
         }
- 
+
         stage('Stop and Remove Container') {
             steps {
                 script {
@@ -40,18 +42,25 @@ pipeline {
                 }
             }
         }
- 
+
         stage('Deploy Image') {
             steps {
                 script {
                     // Use Jenkins credentials for Docker Hub login
                     withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
- 
-                        // Push the image
-                        sh "docker push ${imagename}:latest"
+
+                        // Push the image with the specified tag
+                        sh "docker push ${dockerImageTag}"
                     }
                 }
+            }
+        }
+
+        stage('Trigger ManifestUpdate') {
+            steps {
+                echo "triggering updatemanifestjob"
+                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
             }
         }
     }
