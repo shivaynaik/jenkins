@@ -56,7 +56,17 @@ pipeline {
         stage('Trigger ManifestUpdate') {
             steps {
                 echo "triggering updatemanifestjob"
-                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+                script {
+                    def job = build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+                    // Wait for the completion of the triggered job
+                    job.waitForCompletion()
+                    // Check the result of the triggered job
+                    if (job.result == 'SUCCESS') {
+                        echo 'ManifestUpdate job was successful'
+                    } else {
+                        error 'ManifestUpdate job failed'
+                    }
+                }
             }
         }
     }
