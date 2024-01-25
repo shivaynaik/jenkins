@@ -4,7 +4,6 @@ pipeline {
         dockerImage = ''
         containerName = 'my-container'
         dockerHubCredentials = 'admin'
-        // Add a tag for the Docker image
         dockerImageTag = "${imagename}:${env.BUILD_NUMBER}"
     }
 
@@ -46,11 +45,8 @@ pipeline {
         stage('Deploy Image') {
             steps {
                 script {
-                    // Use Jenkins credentials for Docker Hub login
                     withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
-
-                        // Push the image with the specified tag
                         sh "docker push ${dockerImageTag}"
                     }
                 }
