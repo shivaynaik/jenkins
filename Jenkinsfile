@@ -19,7 +19,8 @@ pipeline {
         stage('Building image') {
             steps {
                 script {
-                    dockerImage = docker.build(imagename)
+                    dockerImageTag = "${imagename}:${env.BUILD_NUMBER}"
+                    dockerImage = docker.build dockerImageTag
                 }
             }
         }
@@ -61,4 +62,3 @@ pipeline {
         }
     }
 }
-
