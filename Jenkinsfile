@@ -12,14 +12,14 @@ pipeline {
     stages {
         stage('Cloning Git') {
             steps {
-                git([url: 'https://github.com/GANESH0369/jenkins.git', branch: 'main'])
+                git(url: 'https://github.com/GANESH0369/jenkins.git', branch: 'main')
             }
         }
 
         stage('Building image') {
             steps {
                 script {
-                    dockerImage = docker.build dockerImageTag
+                    dockerImage = docker.build(imagename)
                 }
             }
         }
@@ -52,5 +52,13 @@ pipeline {
                 }
             }
         }
+
+        stage('Trigger ManifestUpdate') {
+            steps {
+                echo "Triggering updatemanifestjob"
+                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+            }
+        }
     }
 }
+
