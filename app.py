@@ -19,7 +19,7 @@ app = FastAPI()
  
 @app.get("/")
 def read_root():
-    return {"Hello": "jenkins"}
+    return {"Hello": "jenkins_cicd"}
  
 handler = mangum.Mangum(app)
  
