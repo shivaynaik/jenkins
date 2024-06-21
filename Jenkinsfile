@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        imagename = "ganeshpoloju/jenkinss"
+        imagename = "shivaynaik/jenkinss"
         dockerImage = ''
         containerName = 'my-container'
         dockerHubCredentials = 'admin'
@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Cloning Git') {
             steps {
-                git(url: 'https://github.com/GANESH0369/jenkins.git', branch: 'main')
+                git(url: 'https://github.com/shivaynaik/jenkins.git', branch: 'main')
             }
         }
 
@@ -46,7 +46,7 @@ pipeline {
         stage('Deploy Image') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: DOCKER_REGISTRY_CREDS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
                         sh "docker push ${dockerImageTag}"
                     }
