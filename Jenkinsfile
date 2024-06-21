@@ -54,6 +54,7 @@ pipeline {
             }
         }
 
+        /*
         stage('Trigger ManifestUpdate') {
             steps {
                 echo "Triggering updatemanifestjob"
@@ -62,5 +63,6 @@ pipeline {
                 }
             }
         }
+        */
     }
 }
