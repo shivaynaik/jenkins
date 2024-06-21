@@ -45,8 +45,8 @@ pipeline {
 
         stage('Deploy Image') {
             steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: dockerHubCredentials , usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                script {                    
+                    withCredentials([usernamePassword(credentialsId: 'DOCKER_REGISTRY_CREDS' , usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
                         sh "docker push ${dockerImageTag}"
                     }
